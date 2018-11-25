@@ -35,7 +35,12 @@
 - battery! + charger
 - LED stripes!
 
-## Simualtion
+Links:
+- [Aeon UP](https://www.aaeon.com/en/p/up-board-computer-board-for-professional-makers) more powerful than Rasperry Pi
+- [Intel Realsense](https://click.intel.com/intelr-realsensetm-depth-camera-d435.html)
+- AI processing units [Edge TPU](https://aiyprojects.withgoogle.com/edge-tpu/) and [Neural Compute Stick](https://software.intel.com/en-us/neural-compute-stick)
+
+## Simulation
 
 - tests in Gazebo
 - construction in CAD -> Manuel
