@@ -1,0 +1,9 @@
+#!/usr/bin/env python
+
+print "importing main from Python package motion_controller in test_node"
+from motion_controller import main
+print "imported main from Python package motion_controller in tes_node"
+
+if __name__ == '__main__':
+    print "executing main() in test_node"
+    main()

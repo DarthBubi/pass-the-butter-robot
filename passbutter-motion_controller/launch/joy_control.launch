@@ -1,0 +1,9 @@
+<launch>
+    <node pkg="aliencontrol" type="aliencontrol" name="aliencontrol_ds4drv" output="screen">
+        <param name="cmd" value="ds4drv"/>
+    </node>
+
+	<node pkg = "joy" name = "joy_node" type = "joy_node" output="log"/>
+
+	<node pkg="motion_controller" name="passbutter_joy_control" type="joystick" />
+</launch>

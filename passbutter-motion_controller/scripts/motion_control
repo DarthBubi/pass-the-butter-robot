@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+
+import rospy
+from motion_controller.drives import Drives
+from motion_controller.msg import MotorCommand
+from motion_controller.msg import MotionCommand
+
+class MotionControl(object):
+
+    def __init__(self):
+        self.drives = Drives()
+        self.sub = rospy.Subscriber('motion_commands', MotionCommand, self.controlMotors)
+        rospy.on_shutdown(self.shutdown)
+
+    def controlMotors(self, motionCommand):
+        if len(motionCommand.motorCommands) == 0:
+            print "got empty motion command.."
+            return
+
+        for i in xrange(0, len(motionCommand.motorCommands)):
+            cmd = motionCommand.motorCommands[i]
+            print "motor command %i: motor=%s, value=%f" % (i, cmd.motorName, cmd.value)
+
+            if cmd.motorName == "left":
+                self.drives.setMotor2(cmd.value)
+            elif cmd.motorName == "right":
+                self.drives.setMotor1(-cmd.value)
+            else:
+                print "motor with name %s not handled" % cmd.motorName
+
+    def shutdown(self):
+        self.drives.disable()
+
+if __name__ == '__main__':
+    motionControl = MotionControl()
+    rospy.init_node('drives', anonymous=True)
+    rospy.spin()

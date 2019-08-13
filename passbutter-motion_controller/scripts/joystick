@@ -1,0 +1,84 @@
+#!/usr/bin/env python
+
+import rospy
+from std_msgs.msg import String
+from sensor_msgs.msg import Joy
+from motion_controller.msg import MotorCommand
+from motion_controller.msg import MotionCommand
+
+class Joystick(object):
+    def __init__(self):
+        self.motion_commands = rospy.Publisher('motion_commands', MotionCommand, queue_size=5)
+        rospy.Subscriber('joy', Joy, self.callback)
+
+    def generate_motion_command(self, speedLeft, speedRight):
+        cmdLeft = MotorCommand()
+        cmdLeft.motorName = "left"
+        cmdLeft.value = max(min(speedLeft, 0.5), -0.5) 
+
+        cmdRight = MotorCommand()
+        cmdRight.motorName = "right"
+        cmdRight.value = max(min(speedRight, 0.5), -0.5)
+
+        motionCommand = MotionCommand()
+        motionCommand.motorCommands = [cmdLeft, cmdRight]
+    
+        return motionCommand
+
+    def callback(self, joy):
+        # debug messages
+        rospy.logdebug("axis 0: %s", joy.axes[0])
+        rospy.logdebug("axis 1: %s", joy.axes[1])
+        #rospy.loginfo("axis 2: %s", joy.axes[2])
+        #rospy.loginfo("axis 3: %s", joy.axes[3])
+        #rospy.loginfo("axis 4: %s", joy.axes[4])
+        #rospy.loginfo("axis 5: %s", joy.axes[5])
+        #rospy.loginfo("axis 6: %s", joy.axes[6])
+        rospy.logdebug("-------------------")
+
+        c = joy.axes[0]
+
+        left = (c + 1) / 2.0
+        right = abs(c - 1) / 2.0
+
+        rospy.logdebug("left: %s", left)
+        rospy.logdebug("right: %s", right)
+
+        l = 0
+        r = 0
+        if right > 0:
+            l = left / right
+
+        if left > 0:
+            r = right / left
+
+        s = joy.axes[1]
+
+        rospy.logdebug("left: %s", l)
+        rospy.logdebug("right: %s", r)
+
+        l = l * s
+        r = r * s
+
+        rospy.logdebug("left: %s", l)
+        rospy.logdebug("right: %s", r)
+        
+        l *= 0.5
+        r *= 0.5
+
+        motionCommand = self.generate_motion_command(l, r)
+        print "send motion command:"
+        print "  motor=%s, value=%f" % (motionCommand.motorCommands[0].motorName, motionCommand.motorCommands[0].value)
+        print "  motor=%s, value=%f" % (motionCommand.motorCommands[1].motorName, motionCommand.motorCommands[1].value)
+        self.motion_commands.publish(motionCommand)
+
+    def listen(self):
+        # Ready
+        rospy.loginfo("Ready. Wait for joystick input..")
+        # spin() simply keeps python from exiting until this node is stopped
+        rospy.spin()
+
+if __name__ == '__main__':
+    rospy.init_node('joy_listener', anonymous=True)
+    joystick = Joystick()
+    joystick.listen()

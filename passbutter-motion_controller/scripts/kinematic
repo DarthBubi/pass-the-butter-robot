@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+
+import rospy
+
+from motion_controller.msg import MotionCommand
+
+class Kinematic(object):
+   
+	def __init__(self):
+	    self.motionCommands = rospy.Subscriber('motion_commands', MotionCommand, self.calcPosition)
+
+        def calcPosition(self, motionCommand):
+            left = 0
+            right = 0
+
+            for i in xrange(0, len(motionCommand.motorCommands)):
+                cmd = motionCommand.motorCommands[i]
+                print "motor command %i: motor=%s, value=%f" % (i, cmd.motorName, cmd.value)
+
+                if cmd.motorName == "left":
+                    left = cmd.value
+
+                if cmd.motorName == "right":
+                    right = cmd.value
+
+            s = left + right
+
+            if s != 0:
+                left = left / s
+                right = right / s
+
+                print "  => left=%f, right=%f" % (left, right)
+
+                a1 = 90 - right * 180
+                a2 = left * 180 - 90
+
+                print "  => a1=%f, a2=%f" % (a1, a2)
+
+
+if __name__ == '__main__':
+    kinematic = Kinematic()
+    rospy.init_node('kinematic')
+    rospy.spin()
+	
