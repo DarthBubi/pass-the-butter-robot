@@ -10,15 +10,17 @@ class Joystick(object):
     def __init__(self):
         self.motion_commands = rospy.Publisher('motion_commands', MotionCommand, queue_size=5)
         rospy.Subscriber('joy', Joy, self.callback)
+        self.wheel_radius = 0.05
+        self.wheel_separation = 0.3
 
     def generate_motion_command(self, speedLeft, speedRight):
         cmdLeft = MotorCommand()
         cmdLeft.motorName = "left"
-        cmdLeft.value = max(min(speedLeft, 0.5), -0.5) 
+        cmdLeft.value = max(min(speedLeft, 0.35), -0.35) 
 
         cmdRight = MotorCommand()
         cmdRight.motorName = "right"
-        cmdRight.value = max(min(speedRight, 0.5), -0.5)
+        cmdRight.value = max(min(speedRight, 0.35), -0.35)
 
         motionCommand = MotionCommand()
         motionCommand.motorCommands = [cmdLeft, cmdRight]
@@ -37,34 +39,36 @@ class Joystick(object):
         rospy.logdebug("-------------------")
 
         c = joy.axes[0]
-
-        left = (c + 1) / 2.0
-        right = abs(c - 1) / 2.0
-
-        rospy.logdebug("left: %s", left)
-        rospy.logdebug("right: %s", right)
-
-        l = 0
-        r = 0
-        if right > 0:
-            l = left / right
-
-        if left > 0:
-            r = right / left
-
         s = joy.axes[1]
 
-        rospy.logdebug("left: %s", l)
-        rospy.logdebug("right: %s", r)
+        # left = (c + 1) / 2.0
+        # right = abs(c - 1) / 2.0
 
-        l = l * s
-        r = r * s
+        # rospy.logdebug("left: %s", left)
+        # rospy.logdebug("right: %s", right)
 
-        rospy.logdebug("left: %s", l)
-        rospy.logdebug("right: %s", r)
+        # l = 0
+        # r = 0
+        # if right > 0:
+        #     l = left / right
+
+        # if left > 0:
+        #     r = right / left
+
+        # rospy.logdebug("left: %s", l)
+        # rospy.logdebug("right: %s", r)
+
+        # l = l * s
+        # r = r * s
+
+        # rospy.logdebug("left: %s", l)
+        # rospy.logdebug("right: %s", r)
         
+        l = (c - s * self.wheel_separation / 2.0) / self.wheel_radius
+        r = (c + s * self.wheel_separation / 2.0) / self.wheel_radius
+
         l *= 0.5
-        r *= 0.5
+        r *= 0.5        
 
         motionCommand = self.generate_motion_command(l, r)
         print "send motion command:"
