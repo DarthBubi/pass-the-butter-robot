@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="aliencontrol" type="aliencontrol" name="aliencontrol_ds4drv" output="screen">
+        <param name="cmd" value="ds4drv"/>
+    </node>
+    <node pkg = "joy" name = "joy_node" type = "joy_node"/>
+    <node pkg="motion_controller" type="joystick" name="joy_control" />
+</launch>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+    <param name="robot_description" textfile="$(find pass_the_butter_description)/robots/passbutter_simple.urdf" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+    <include file="$(find passbutter_launch)/launch/basic_drivers.launch" />
+    <machine name="passbutter-drives" address="passbutter-drives.fritz.box" user="pi" env-loader="/home/pi/setup.sh" />
+    <node machine="passbutter-drives" pkg="motion_controller" type="motion_control" name="motion_control" />
+</launch>
