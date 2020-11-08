@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="pass_the_butter_sensors" type="optical_encoder.py" name="encoder" ns="left_wheel" args="16"/>
+    <node pkg="pass_the_butter_sensors" type="optical_encoder.py" name="encoder" ns="right_wheel" args="5"/>
+</launch>
