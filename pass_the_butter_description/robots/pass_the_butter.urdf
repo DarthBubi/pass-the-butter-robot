@@ -7,23 +7,59 @@
             <mass value="1.0"/>
             <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
         </inertial>
-        <visual>
-            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <visual name="motor_base">
+            <origin xyz="0.0 0.0 -0.03" rpy="0.0 0.0 1.57"/>
             <geometry>
-                <mesh filename="package:/pass_the_butter_description/meshes/visual/base_full.dae"/>
+                <mesh filename="package://pass_the_butter_description/meshes/visual/base_full.dae"/>
+            </geometry>
+        </visual>
+        <visual name="front_bumper">
+            <origin xyz="0.0 0.0 -0.032" rpy="0.0 0.0 1.57"/>
+            <geometry>
+                <mesh filename="package://pass_the_butter_description/meshes/visual/bumper.dae"/>
+            </geometry>
+        </visual>
+        <visual name="rear_bumper">
+            <origin xyz="0.0 -0.0 -0.032" rpy="0.0 0.0 -1.57"/>
+            <geometry>
+                <mesh filename="package://pass_the_butter_description/meshes/visual/bumper.dae"/>
+            </geometry>
+        </visual>
+        <visual>
+            <origin xyz="0.09 0.0 0.0" rpy="0.0 1.57 0.0"/>
+            <geometry>
+                <cylinder radius="0.021" length="0.087"/>
+            </geometry>
+        </visual>
+        <visual>
+            <origin xyz="-0.09 0.0 0.0" rpy="0.0 1.57 0.0"/>
+            <geometry>
+                <cylinder radius="0.021" length="0.087"/>
+            </geometry>
+        </visual>
+        <visual>
+            <origin xyz="-0.14 0.0 0.0" rpy="0.0 1.57 0.0"/>
+            <geometry>
+                <cylinder radius="0.002" length="0.012"/>
+            </geometry>
+        </visual>
+        <visual>
+            <origin xyz="0.14 0.0 0.0" rpy="0.0 1.57 0.0"/>
+            <geometry>
+                <cylinder radius="0.002" length="0.012"/>
             </geometry>
         </visual>
         <!-- TODO -->
-        <collision>
+        <!-- <collision>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <mesh filename="package:/pass_the_butter_description/meshes/collision/base_full.stl"/>                
+                <mesh filename="package://pass_the_butter_description/meshes/collision/base_full.stl"/>                
             </geometry>
-        </collision>
+        </collision>>-->
     </link>
 
     <joint name="base_base_link" type="fixed">
-        <origin xyz="0.0 0.0 2.7" rpy="0.0 0.0 0.0"/>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
         <parent link="base_link"/>
         <child link="base"/>
     </joint>
@@ -52,7 +88,7 @@
     </link>
 
     <joint name="base_wheel_left" type="revolute">
-        <origin xyz="-0.175 0.0 0.0" rpy="1.570796 0.0 1.570796"/>
+        <origin xyz="-0.16 0.0 0.0" rpy="1.570796 0.0 1.570796"/>
         <parent link="base"/>
         <child link="wheel_left"/>
         <axis xyz="1.0 0.0 0.0"/>
@@ -83,7 +119,7 @@
     </link>
 
     <joint name="base_wheel_right" type="revolute">
-        <origin xyz="0.175 0.0 0.0" rpy="1.570796 0.0 1.570796"/>
+        <origin xyz="0.16 0.0 0.0" rpy="1.570796 0.0 1.570796"/>
         <parent link="base"/>
         <child link="wheel_right"/>
         <axis xyz="1.0 0.0 0.0"/>
